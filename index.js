@@ -9,7 +9,10 @@ var fakeSpark = {};
 
 var app = connect();
 
-app.use(morgan());
+if (process.env.NODE_ENV !== 'production') {
+  app.use(morgan());
+}
+
 app.use(bodyParser.json());
 app.use('/github', githubNotifier({ spark:fakeSpark }));
 app.use('/circle', circleNotifier({ spark:fakeSpark }));
