@@ -1,0 +1,23 @@
+{
+  "name": "statusbot",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/reconbot/statusbot.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/reconbot/statusbot/issues"
+  },
+  "dependencies": {
+    "connect": "~3.0.1",
+    "body-parser": "~1.4.3",
+    "morgan": "~1.1.1"
+  }
+}
