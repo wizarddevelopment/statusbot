@@ -1,7 +1,7 @@
 var util = require('util');
 
 var circleNotifier = function (req, res, next) {
-  console.log(req.url, req.body, req.method);
+  console.log('circle', req.url, req.body, req.method);
   res.end();
 };
 
