@@ -9,14 +9,14 @@ var SparkStatus = module.exports = function (opt) {
 };
 
 
-SparkStatus.prototype.buildStatus = function(data) {
-  if (data.success) {
+SparkStatus.prototype.buildStatus = function(build) {
+  if (build.success) {
     this.backlight("00FF00");
-    this.write("Repo: " + data.repo + "\nStatus: Success!");
+    this.write("Repo: " + build.repo + "\nStatus: Success!");
     return;
   }
   this.backlight("FF0000");
-  this.write("Repo: " + data.repo + "\nStatus: Failure");
+  this.write("Repo: " + build.repo + "\nStatus: Failure");
 };
 
 SparkStatus.prototype.sendQueued = function(cmd, data, cb) {
