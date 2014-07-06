@@ -48,7 +48,7 @@ void loop() {
 
 void welcomeMessage() {
   backlight(WIZARD_ORANGE);
-  lcd.setCursor(0,0);
+  lcd.clear();
   lcd.print("Wizard Dev");
   lcd.setCursor(0,1);
   lcd.print("Hello Programs!");
