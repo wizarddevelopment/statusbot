@@ -35,21 +35,25 @@ void setup() {
   pinMode(G_PIN, OUTPUT);
   pinMode(B_PIN, OUTPUT);
 
+  Spark.function("backlight", netBacklight);
+  Spark.function("testLight", testBacklight);
+  Spark.function("printLCD", printLCD);
+
+  welcomeMessage();
+}
+
+void loop() {
+
+}
+
+void welcomeMessage() {
   backlight(WIZARD_ORANGE);
-    lcd.print("Wizard Dev");
+  lcd.print("Wizard Dev");
   lcd.setCursor(0,1);
   lcd.print("Hello Programs!");
   delay(1000);
   lcd.setCursor(0,1);
   lcd.print("StatusBot Online");
-
-  Spark.function("backlight", netBacklight);
-  Spark.function("testLight", testBacklight);
-  Spark.function("printLCD", printLCD);
-}
-
-void loop() {
-
 }
 
 int printLCD (String message) {
@@ -101,6 +105,7 @@ int testBacklight(String args) {
   backlight(WIZARD_GRAY);
   delay(500);
 
+  welcomeMessage();
   return 1;
 }
 
