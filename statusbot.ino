@@ -118,8 +118,8 @@ void backlight(unsigned long rgb) {
 
   // normalize the colors a bit
   // r = map(r, 0, 255, 0, 100);
-  g = map(g, 0, 255, 0, 200);
-  b = map(g, 0, 255, 0, 200);
+  // g = map(g, 0, 255, 0, 200);
+  // b = map(g, 0, 255, 0, 200);
 
   r = map(r, 0, 255, 0, brightness);
   g = map(g, 0, 255, 0, brightness);
