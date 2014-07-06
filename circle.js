@@ -1,5 +1,3 @@
-var util = require('util');
-
 module.exports = function(opt){
   var spark = opt.spark;
   var circleNotifier = function (req, res, next) {

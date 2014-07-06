@@ -7,7 +7,15 @@ var githubNotifier = require('./github');
 var SparkStatus = require('./spark')
 
 var app = connect();
-var spark = new SparkStatus();
+
+if (!process.env.SPARK_DEVICE_ID || !process.env.SPARK_ACCESS_TOKEN) {
+  throw new Error("Please make sure SPARK_DEVICE_ID and SPARK_ACCESS_TOKEN environment varibles are set.")
+}
+
+var spark = new SparkStatus({
+  deviceId: process.env.SPARK_DEVICE_ID,
+  accessToken: process.env.SPARK_ACCESS_TOKEN
+});
 
 if (process.env.NODE_ENV !== 'production') {
   app.use(morgan());
