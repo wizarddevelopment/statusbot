@@ -6,30 +6,20 @@ var SparkStatus = module.exports = function (opt) {
   this.accessToken = opt.accessToken;
   this.rgb = opt.rgb || ['A2','A1','A0'];
   this.queue = [];
-  this.clearStatus();
-};
-
-SparkStatus.prototype.clearStatus = function() {
-  var rgb = this.rgb;
-  this.digitalWrite(this.rgb[0], 1);
-  this.digitalWrite(this.rgb[1], 1);
-  this.digitalWrite(this.rgb[2], 1);
 };
 
 
-SparkStatus.prototype.buildStatus = function(status) {
-  console.log("Spark status: " + status);
-  this.clearStatus();
-  if (status === "success"){
-    this.digitalWrite(this.rgb[1], 0);
-    this.digitalWrite(this.rgb[0], 1);
-  } else {
-    this.digitalWrite(this.rgb[0], 0);
-    this.digitalWrite(this.rgb[1], 1);
+SparkStatus.prototype.buildStatus = function(data) {
+  if (data.success) {
+    this.backlight("00FF00");
+    this.write("Repo: " + data.repo + "\nStatus: Success!");
+    return;
   }
+  this.backlight("FF0000");
+  this.write("Repo: " + data.repo + "\nStatus: Failure");
 };
 
-SparkStatus.prototype.send = function(cmd, data, cb) {
+SparkStatus.prototype.sendQueued = function(cmd, data, cb) {
   this.queue.push([cmd, data, cb]);
   this.processQueue();
 };
@@ -47,7 +37,7 @@ SparkStatus.prototype.processQueue = function() {
   var data = item[1];
   var cb = item[2];
 
-  this._send(cmd, data, function(){
+  this.send(cmd, data, function(){
     if (cb) {
       cb.apply(null, arguments);
     }
@@ -56,7 +46,7 @@ SparkStatus.prototype.processQueue = function() {
   }.bind(this));
 };
 
-SparkStatus.prototype._send = function(cmd, data, cb) {
+SparkStatus.prototype.send = function(cmd, data, cb) {
   cmd = cmd || "";
   data = data || {};
   data.access_token = this.accessToken;
@@ -80,25 +70,28 @@ SparkStatus.prototype._send = function(cmd, data, cb) {
   });
 };
 
+
 /*
-  spark.digitalWrite(pin, value, cb);
-  pin: eg 'D7', 'A1'
-  value: 0 or 1
+  spark.write(message, cb);
+  message: string // one or two lines, 16 chars wide
   cb: undefined or function(err, value){}
+
+  see http://www.adafruit.com/datasheets/HD44780.pdf for special char codes
 */
-SparkStatus.prototype.digitalWrite = function(pin, value, cb) {
-  var status = value ? 'HIGH' : 'LOW';
-  var cmdstr = pin + "," + status;
-  this.send('digitalwrite', {params: cmdstr}, cb);
+SparkStatus.prototype.write = function(message, cb) {
+  this.send('printLCD', {params: message}, cb);
 };
 
 /*
-  spark.analogWrite(pin, value, cb);
-  pin: eg 'A1', 'A2'
-  value: 0-255
+  spark.backlight(hex, cb);
+  hex: 'FF00FF' hex color code
   cb: undefined or function(err, value){}
 */
-SparkStatus.prototype.analogWrite = function(pin, value, cb) {
-  var cmdstr = pin + "," + value;
-  this.send('analogwrite', {params: cmdstr}, cb);
+SparkStatus.prototype.backlight = function(hex, cb) {
+  this.send('backlight', {params: hex}, cb);
+};
+
+
+SparkStatus.prototype.testBacklight = function(cb) {
+  this.send('testLight', {}, cb);
 };

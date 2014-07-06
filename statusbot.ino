@@ -44,7 +44,7 @@ void setup() {
   lcd.print("StatusBot Online");
 
   Spark.function("backlight", netBacklight);
-  Spark.function("testBacklight", testBacklight);
+  Spark.function("testLight", testBacklight);
   Spark.function("printLCD", printLCD);
 }
 
@@ -54,7 +54,15 @@ void loop() {
 
 int printLCD (String message) {
   lcd.clear();
-  lcd.print(message);
+  int nline = message.indexOf("\n");
+  if (nline == -1) {
+    lcd.print(message);
+    return 1;
+  }
+
+  lcd.print(message.substring(0,nline));
+  lcd.setCursor(0,1);
+  lcd.print(message.substring(nline+1));
   return 1;
 }
 
@@ -65,19 +73,34 @@ int netBacklight(String args) {
   return 1;
 }
 
+int testBacklight() {
+  return testBacklight("");
+}
+
 int testBacklight(String args) {
   backlight(RGB_COLOR_RED);
-  delay(1000);
+  delay(500);
   backlight(RGB_COLOR_GREEN);
-  delay(1000);
+  delay(500);
   backlight(RGB_COLOR_BLUE);
-  delay(1000);
+  delay(500);
+  backlight(RGB_COLOR_YELLOW);
+  delay(500);
+  backlight(RGB_COLOR_CYAN);
+  delay(500);
+  backlight(RGB_COLOR_MAGENTA);
+  delay(500);
+  backlight(RGB_COLOR_WHITE);
+  delay(500);
+  backlight(RGB_COLOR_ORANGE);
+  delay(500);
   backlight(WIZARD_ORANGE);
-  delay(1000);
+  delay(500);
   backlight(WIZARD_BLUE);
-  delay(1000);
+  delay(500);
   backlight(WIZARD_GRAY);
-  delay(1000);
+  delay(500);
+
   return 1;
 }
 
@@ -93,9 +116,10 @@ void backlight(unsigned long rgb) {
   // lcd.print(g, HEX);
   // lcd.print(b, HEX);
 
-  // normalize the red and green LEDs - they are brighter than the rest!
-  r = map(r, 0, 255, 0, 100);
-  g = map(g, 0, 255, 0, 150);
+  // normalize the colors a bit
+  // r = map(r, 0, 255, 0, 100);
+  g = map(g, 0, 255, 0, 200);
+  b = map(g, 0, 255, 0, 200);
 
   r = map(r, 0, 255, 0, brightness);
   g = map(g, 0, 255, 0, brightness);
