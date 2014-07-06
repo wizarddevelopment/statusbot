@@ -5,7 +5,7 @@ module.exports = function(opt){
     var success = req.body.payload.outcome === 'success';
     var repo = req.body.payload.reponame;
     spark.buildStatus({
-      repo: 'some repo',
+      repo: repo,
       success: success
     });
     res.end();
