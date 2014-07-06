@@ -4,7 +4,7 @@ var url = require('url');
 var SparkStatus = module.exports = function (opt) {
   this.deviceId = opt.deviceId;
   this.accessToken = opt.accessToken;
-  this.rgb = opt.rgb || ['D2','D1','D0'];
+  this.rgb = opt.rgb || ['A2','A1','A0'];
   this.queue = [];
   this.clearStatus();
 };
@@ -22,8 +22,10 @@ SparkStatus.prototype.buildStatus = function(status) {
   this.clearStatus();
   if (status === "success"){
     this.digitalWrite(this.rgb[1], 0);
+    this.digitalWrite(this.rgb[0], 1);
   } else {
     this.digitalWrite(this.rgb[0], 0);
+    this.digitalWrite(this.rgb[1], 1);
   }
 };
 
@@ -36,20 +38,22 @@ SparkStatus.prototype.processQueue = function() {
   if (this.sending) { return; }
 
   var item = this.queue.shift();
-  if (item) {
-    this.sending = true;
-    var cmd = item[0];
-    var data = item[1];
-    var cb = item[2];
-
-    this._send(cmd, data, function(){
-      if (cb) {
-        cb.apply(null, arguments);
-      }
-      this.sending = false;
-      this.processQueue();
-    }.bind(this));
+  if (!item) {
+    return;
   }
+
+  this.sending = true;
+  var cmd = item[0];
+  var data = item[1];
+  var cb = item[2];
+
+  this._send(cmd, data, function(){
+    if (cb) {
+      cb.apply(null, arguments);
+    }
+    this.sending = false;
+    this.processQueue();
+  }.bind(this));
 };
 
 SparkStatus.prototype._send = function(cmd, data, cb) {
@@ -70,7 +74,9 @@ SparkStatus.prototype._send = function(cmd, data, cb) {
       return cb && cb(err, body);
     }
 
-    cb && cb(null, body.return_value);
+    if (cb) {
+      cb(null, body.return_value);
+    }
   });
 };
 
@@ -78,10 +84,21 @@ SparkStatus.prototype._send = function(cmd, data, cb) {
   spark.digitalWrite(pin, value, cb);
   pin: eg 'D7', 'A1'
   value: 0 or 1
-  cb: function(err, value){}
+  cb: undefined or function(err, value){}
 */
 SparkStatus.prototype.digitalWrite = function(pin, value, cb) {
   var status = value ? 'HIGH' : 'LOW';
   var cmdstr = pin + "," + status;
   this.send('digitalwrite', {params: cmdstr}, cb);
+};
+
+/*
+  spark.analogWrite(pin, value, cb);
+  pin: eg 'A1', 'A2'
+  value: 0-255
+  cb: undefined or function(err, value){}
+*/
+SparkStatus.prototype.analogWrite = function(pin, value, cb) {
+  var cmdstr = pin + "," + value;
+  this.send('analogwrite', {params: cmdstr}, cb);
 };
