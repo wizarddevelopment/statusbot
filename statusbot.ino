@@ -2,17 +2,17 @@
 #include "LiquidCrystal/LiquidCrystal.h"
 
 // Colors
-#define RGB_COLOR_RED   0xFF0000ul
+#define RGB_COLOR_RED     0xFF0000ul
 #define RGB_COLOR_GREEN   0x00FF00ul
 #define RGB_COLOR_BLUE    0x0000FFul
 #define RGB_COLOR_YELLOW  0xFFFF00ul
 #define RGB_COLOR_CYAN    0x00FFFFul
 #define RGB_COLOR_MAGENTA 0xFF00FFul
 #define RGB_COLOR_WHITE   0xFFFFFFul
-#define RGB_COLOR_ORANGE    0xFF6000ul
-#define WIZARD_ORANGE       0xc03f21ul
-#define WIZARD_BLUE         0x285166ul
-#define WIZARD_GRAY         0x515159ul
+#define RGB_COLOR_ORANGE  0xFF6000ul
+#define WIZARD_ORANGE     0xFF3f00ul
+#define WIZARD_BLUE       0x285166ul
+#define WIZARD_GRAY       0x515159ul
 
 // Pins for backlight
 #define R_PIN D0
