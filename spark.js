@@ -4,19 +4,55 @@ var url = require('url');
 var SparkStatus = module.exports = function (opt) {
   this.deviceId = opt.deviceId;
   this.accessToken = opt.accessToken;
-  // this.queue = [];
+  this.rgb = opt.rgb || ['D2','D1','D0'];
+  this.queue = [];
+  this.clearStatus();
 };
+
+SparkStatus.prototype.clearStatus = function() {
+  var rgb = this.rgb;
+  this.digitalWrite(this.rgb[0], 1);
+  this.digitalWrite(this.rgb[1], 1);
+  this.digitalWrite(this.rgb[2], 1);
+};
+
 
 SparkStatus.prototype.buildStatus = function(status) {
   console.log("Spark status: " + status);
+  this.clearStatus();
   if (status === "success"){
-    this.digitalWrite('D7', 1);
+    this.digitalWrite(this.rgb[1], 0);
   } else {
-    this.digitalWrite('D7', 0);
+    this.digitalWrite(this.rgb[0], 0);
   }
 };
 
 SparkStatus.prototype.send = function(cmd, data, cb) {
+  this.queue.push([cmd, data, cb]);
+  this.processQueue();
+};
+
+SparkStatus.prototype.processQueue = function() {
+  if (this.sending) { return; }
+
+  var item = this.queue.shift();
+  if (item) {
+    this.sending = true;
+    var cmd = item[0];
+    var data = item[1];
+    var cb = item[2];
+
+    this._send(cmd, data, function(){
+      if (cb) {
+        cb.apply(null, arguments);
+      }
+      this.sending = false;
+      this.processQueue();
+    }.bind(this));
+  }
+};
+
+SparkStatus.prototype._send = function(cmd, data, cb) {
   cmd = cmd || "";
   data = data || {};
   data.access_token = this.accessToken;
