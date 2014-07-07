@@ -12,11 +12,11 @@ var SparkStatus = module.exports = function (opt) {
 SparkStatus.prototype.buildStatus = function(build) {
   if (build.success) {
     this.backlight("00FF00");
-    this.write("Repo: " + build.repo + "\nStatus: Success!");
+    this.write(build.repo + "/" + build.branch + "\n" + build.commit_msg);
     return;
   }
   this.backlight("FF0000");
-  this.write("Repo: " + build.repo + "\nStatus: Failure");
+  this.write(build.repo + "/" + build.branch + "\n" + build.commit_msg);
 };
 
 SparkStatus.prototype.sendQueued = function(cmd, data, cb) {
