@@ -4,7 +4,6 @@ var url = require('url');
 var SparkStatus = module.exports = function (opt) {
   this.deviceId = opt.deviceId;
   this.accessToken = opt.accessToken;
-  this.rgb = opt.rgb || ['A2','A1','A0'];
   this.queue = [];
 };
 
