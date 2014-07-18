@@ -111,8 +111,6 @@ int testBacklight(String args) {
 }
 
 void backlight(unsigned long rgb) {
-  // lcd.clear();
-
   int r = rgb >> 16 & 0x0000FF;
   int g = rgb >> 8 & 0x0000FF;
   int b = rgb & 0x0000FF;
