@@ -1,5 +1,7 @@
 # Wizard Development StatusBot
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/wizarddevelopment/statusbot.svg)](https://greenkeeper.io/)
+
 Any sufficiently mature development team eventually has someone who makes a build status indicator. This one is ours.
 
 ![](img/completed-home.jpg)

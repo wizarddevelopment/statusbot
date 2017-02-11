@@ -17,10 +17,10 @@
     "url": "https://github.com/reconbot/statusbot/issues"
   },
   "dependencies": {
-    "connect": "~3.0.1",
-    "body-parser": "~1.4.3",
-    "morgan": "~1.1.1",
-    "request": "~2.36.0"
+    "connect": "~3.5.0",
+    "body-parser": "~1.16.1",
+    "morgan": "~1.8.1",
+    "request": "~2.79.0"
   },
   "engines": {
     "node": "0.10.x"
